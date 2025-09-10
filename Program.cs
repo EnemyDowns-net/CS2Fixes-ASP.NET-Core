@@ -10,7 +10,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserprefDbContext>(options =>
-    options.UseSqlite(builder.Configuration["UserprefDb"]));
+{
+    if (builder.Configuration["DatabaseType"] != "mysql")
+        options.UseSqlite(builder.Configuration["UserprefDb"]);
+
+    else
+    {
+        var connectionString = builder.Configuration.GetConnectionString("Mysql");
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    }
+});
 
 var app = builder.Build();
 

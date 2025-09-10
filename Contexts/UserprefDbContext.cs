@@ -9,8 +9,15 @@ public class UserprefDbContext : DbContext
     public DbSet<Userpref> Userprefs { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Entities.Userpref>()
+        modelBuilder.Entity<Userpref>()
+            .Property(e => e.Key)
+            .HasMaxLength(64);
+
+        modelBuilder.Entity<Userpref>()
+            .Property(e => e.Value)
+            .HasMaxLength(64);
+
+        modelBuilder.Entity<Userpref>()
             .HasKey(up => new { up.Steamid, up.Key });
-        base.OnModelCreating(modelBuilder);
     }
 }
