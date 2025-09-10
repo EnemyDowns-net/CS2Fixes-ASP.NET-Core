@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserprefDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("UserprefDb")));
+    options.UseSqlite(builder.Configuration["UserprefDb"]));
 
 var app = builder.Build();
 

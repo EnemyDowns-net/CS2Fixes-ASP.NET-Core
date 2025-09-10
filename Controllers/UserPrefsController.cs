@@ -71,7 +71,7 @@ namespace CS2Fixes_ASP_DOTNET_Core.Controllers
                 ["message"] = "Userprefs updated successfully"
             };
 
-            return Ok();
+            return Ok(results);
         }
     }
 }
