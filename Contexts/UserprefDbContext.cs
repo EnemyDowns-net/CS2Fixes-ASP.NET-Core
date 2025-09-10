@@ -1,7 +1,7 @@
-﻿using CS2Fixes_ASPCore.Entities;
+﻿using CS2Fixes_ASP_DOTNET_Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CS2Fixes_ASPCore.Contexts;
+namespace CS2Fixes_ASP_DOTNET_Core.Contexts;
 
 public class UserprefDbContext : DbContext
 {

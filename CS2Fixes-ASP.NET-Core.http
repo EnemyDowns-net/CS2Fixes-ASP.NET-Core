@@ -1,0 +1,6 @@
+@CS2Fixes_ASP_DOTNET_Core_HostAddress = http://localhost:5138
+
+GET {{CS2Fixes_ASP_DOTNET_Core_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

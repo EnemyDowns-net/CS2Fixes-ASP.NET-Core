@@ -1,3 +1,4 @@
+using CS2Fixes_ASP_DOTNET_Core.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CS2Fixes_ASPCore.Contexts.UserprefDbContext>(options =>
+builder.Services.AddDbContext<UserprefDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("UserprefDb")));
 
 var app = builder.Build();
@@ -20,11 +21,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// EF Migration will work.
+/*
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<CS2Fixes_ASPCore.Contexts.UserprefDbContext>();
+    var db = scope.ServiceProvider.GetRequiredService<UserprefDbContext>();
     db.Database.EnsureCreated();
 }
+*/
 
 app.UseHttpsRedirection();
 

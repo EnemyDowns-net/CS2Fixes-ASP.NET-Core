@@ -1,6 +1,0 @@
-@CS2Fixes_ASPCore_HostAddress = http://localhost:5138
-
-GET {{CS2Fixes_ASPCore_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
