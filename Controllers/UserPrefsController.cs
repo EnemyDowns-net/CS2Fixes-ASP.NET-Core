@@ -24,59 +24,45 @@ namespace CS2Fixes_ASP_DOTNET_Core.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] long steamid)
+        public async Task<ActionResult<JsonObject>> Get([Required] long steamid)
         {
-            var prefs = await _context.Userprefs.Where(p => p.Steamid == steamid).ToListAsync();
-
-            var result = new JsonObject();
-
-            // cs2fixes will looking for it anyway return anything than Ok it just result to not working.
-            if(prefs.Count == 0 || prefs == null)
-            {
-                result["steamid"] = steamid.ToString();
-                return Ok(result);
-            }
-
-            foreach (var pref in prefs)
-            {
-                result[pref.Key] = pref.Value;
-            }
-
-            return Ok(result);
+            return await GetUserPrefs(steamid);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromQuery] long steamid, [FromBody] JsonObject userPrefs)
+        public async Task<ActionResult<JsonObject>> Post([Required] long steamid, [Required] JsonObject userPrefs)
         {
             foreach (var jsonPref in userPrefs)
             {
-                var existingPref = await _context.Userprefs.FirstOrDefaultAsync(p => p.Steamid == steamid && p.Key == jsonPref.Key);
+                Userpref pref = new Userpref()
+                {
+                    Steamid = steamid,
+                    Key = jsonPref.Key,
+                    Value = (string)jsonPref.Value
+                };
 
-                if (existingPref != null)
-                {
-                    existingPref.Value = jsonPref.Value?.ToString() ?? string.Empty;
-                    // No need to call Update; EF tracks changes automatically
-                }
+                if (_context.Userprefs.Any(pref => pref.Steamid == steamid && pref.Key == jsonPref.Key))
+                    _context.Userprefs.Update(pref);
                 else
-                {
-                    var pref = new Userpref
-                    {
-                        Steamid = steamid,
-                        Key = jsonPref.Key,
-                        Value = jsonPref.Value?.ToString() ?? string.Empty
-                    };
-                    await _context.Userprefs.AddAsync(pref);
-                }
+                    _context.Userprefs.Add(pref);
             }
 
             await _context.SaveChangesAsync();
 
-            JsonObject results = new JsonObject
-            {
-                ["message"] = "Userprefs updated successfully"
-            };
+            return await GetUserPrefs(steamid);
+        }
 
-            return Ok(results);
+        private async Task<ActionResult<JsonObject>> GetUserPrefs(long steamid)
+        {
+            List<Userpref> prefs = await _context.Userprefs.AsQueryable().Where(s => s.Steamid == steamid).ToListAsync();
+
+            JsonObject json = new JsonObject();
+
+            foreach (Userpref pref in prefs)
+                json[pref.Key] = pref.Value;
+
+            return json;
         }
     }
+}
 }
