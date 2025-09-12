@@ -28,10 +28,14 @@ namespace CS2Fixes_ASP_DOTNET_Core.Controllers
         {
             var prefs = await _context.Userprefs.Where(p => p.Steamid == steamid).ToListAsync();
 
-            if(prefs.Count == 0 || prefs == null)
-                return NotFound("No userprefs found for this steamid");
-
             var result = new JsonObject();
+
+            // cs2fixes will looking for it anyway return anything than Ok it just result to not working.
+            if(prefs.Count == 0 || prefs == null)
+            {
+                result["steamid"] = steamid.ToString();
+            }
+
             foreach (var pref in prefs)
             {
                 result[pref.Key] = pref.Value;
