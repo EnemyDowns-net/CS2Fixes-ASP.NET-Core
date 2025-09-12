@@ -34,6 +34,7 @@ namespace CS2Fixes_ASP_DOTNET_Core.Controllers
             if(prefs.Count == 0 || prefs == null)
             {
                 result["steamid"] = steamid.ToString();
+                return Ok(result);
             }
 
             foreach (var pref in prefs)
